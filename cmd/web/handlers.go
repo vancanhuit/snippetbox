@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/vancanhuit/snippetbox/internal/models"
 )
 
@@ -23,7 +24,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil || id < 1 {
 		app.notFound(w)
 		return
