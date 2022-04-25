@@ -23,10 +23,13 @@ func (app *application) routes() http.Handler {
 	fileServer := http.FileServer(http.Dir("./ui/static"))
 	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
-	r.Get("/", app.home)
-	r.Get("/snippet/view/{id}", app.snippetView)
-	r.Get("/snippet/create", app.snippetCreateView)
-	r.Post("/snippet/create", app.snippetCreatePost)
+	r.With(app.sessionManager.LoadAndSave).Get("/", app.home)
+	r.With(app.sessionManager.LoadAndSave).Get(
+		"/snippet/view/{id}", app.snippetView)
+	r.With(app.sessionManager.LoadAndSave).Get(
+		"/snippet/create", app.snippetCreateView)
+	r.With(app.sessionManager.LoadAndSave).Post(
+		"/snippet/create", app.snippetCreatePost)
 
 	return r
 }
