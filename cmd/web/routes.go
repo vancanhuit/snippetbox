@@ -23,13 +23,30 @@ func (app *application) routes() http.Handler {
 	fileServer := http.FileServer(http.Dir("./ui/static"))
 	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
-	r.With(app.sessionManager.LoadAndSave).Get("/", app.home)
-	r.With(app.sessionManager.LoadAndSave).Get(
+	dynamic := []func(next http.Handler) http.Handler{
+		app.sessionManager.LoadAndSave,
+		noSurf,
+	}
+	protected := append(dynamic, app.requireAuthentication)
+
+	r.With(dynamic...).Get("/", app.home)
+	r.With(dynamic...).Get(
 		"/snippet/view/{id}", app.snippetView)
-	r.With(app.sessionManager.LoadAndSave).Get(
+	r.With(protected...).Get(
 		"/snippet/create", app.snippetCreateView)
-	r.With(app.sessionManager.LoadAndSave).Post(
+	r.With(protected...).Post(
 		"/snippet/create", app.snippetCreatePost)
+
+	r.With(dynamic...).Get(
+		"/user/signup", app.userSignupView)
+	r.With(dynamic...).Post(
+		"/user/signup", app.userSignupPost)
+	r.With(dynamic...).Get(
+		"/user/login", app.userLoginView)
+	r.With(dynamic...).Post(
+		"/user/login", app.userLoginPost)
+	r.With(protected...).Post(
+		"/user/logout", app.userLogoutPost)
 
 	return r
 }

@@ -10,3 +10,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-playground/form/v4 v4.2.0
 )
+
+require golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
+
+require github.com/justinas/nosurf v1.1.1
