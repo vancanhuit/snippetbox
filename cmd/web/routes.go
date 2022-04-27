@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/vancanhuit/snippetbox/ui"
 )
 
 func (app *application) routes() http.Handler {
@@ -20,7 +21,7 @@ func (app *application) routes() http.Handler {
 	r.Use(app.logRequest)
 	r.Use(secureHeaders)
 
-	fileServer := http.FileServer(http.Dir("./ui/static"))
+	fileServer := http.FileServer(http.FS(ui.Files))
 	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	dynamic := []func(next http.Handler) http.Handler{
