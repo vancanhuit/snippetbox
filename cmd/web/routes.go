@@ -26,6 +26,7 @@ func (app *application) routes() http.Handler {
 	dynamic := []func(next http.Handler) http.Handler{
 		app.sessionManager.LoadAndSave,
 		noSurf,
+		app.authenticate,
 	}
 	protected := append(dynamic, app.requireAuthentication)
 
