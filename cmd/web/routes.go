@@ -22,7 +22,9 @@ func (app *application) routes() http.Handler {
 	r.Use(secureHeaders)
 
 	fileServer := http.FileServer(http.FS(ui.Files))
-	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
+	r.Handle("/static/*", fileServer)
+
+	r.Get("/ping", ping)
 
 	dynamic := []func(next http.Handler) http.Handler{
 		app.sessionManager.LoadAndSave,
