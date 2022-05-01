@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -76,116 +77,116 @@ func TestSnippetView(t *testing.T) {
 	}
 }
 
-// func TestUserSignup(t *testing.T) {
-// 	app := newTestApplication(t)
-// 	ts := newTestServer(t, app.routes())
-// 	defer ts.Close()
+func TestUserSignup(t *testing.T) {
+	app := newTestApplication(t)
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
 
-// 	_, _, body := ts.get(t, "/user/signup")
-// 	validCSRFToken := extractCSRFToken(t, body)
+	_, _, body := ts.get(t, "/user/signup")
+	validCSRFToken := extractCSRFToken(t, body)
 
-// 	const (
-// 		validName     = "Bob"
-// 		validPassword = "validPa$$word"
-// 		validEmail    = "bob@example.com"
-// 		formTag       = `<form action="/user/signup" method="post" novalidate>`
-// 	)
+	const (
+		validName     = "Bob"
+		validPassword = "validPa$$word"
+		validEmail    = "bob@example.com"
+		formTag       = `<form action="/user/signup" method="post" novalidate>`
+	)
 
-// 	tests := []struct {
-// 		name         string
-// 		userName     string
-// 		userEmail    string
-// 		userPassword string
-// 		csrfToken    string
-// 		wantCode     int
-// 		wantFormTag  string
-// 	}{
-// 		{
-// 			name:         "Valid submission",
-// 			userName:     validName,
-// 			userEmail:    validEmail,
-// 			userPassword: validPassword,
-// 			csrfToken:    validCSRFToken,
-// 			wantCode:     http.StatusSeeOther,
-// 		},
-// 		{
-// 			name:         "Invalid CSRF Token",
-// 			userName:     validName,
-// 			userEmail:    validEmail,
-// 			userPassword: validPassword,
-// 			csrfToken:    "wrongToken",
-// 			wantCode:     http.StatusBadRequest,
-// 		},
-// 		{
-// 			name:         "Empty name",
-// 			userName:     "",
-// 			userEmail:    validEmail,
-// 			userPassword: validPassword,
-// 			csrfToken:    validCSRFToken,
-// 			wantCode:     http.StatusUnprocessableEntity,
-// 			wantFormTag:  formTag,
-// 		},
-// 		{
-// 			name:         "Empty email",
-// 			userName:     validName,
-// 			userEmail:    "",
-// 			userPassword: validPassword,
-// 			csrfToken:    validCSRFToken,
-// 			wantCode:     http.StatusUnprocessableEntity,
-// 			wantFormTag:  formTag,
-// 		},
-// 		{
-// 			name:         "Empty password",
-// 			userName:     validName,
-// 			userEmail:    validEmail,
-// 			userPassword: "",
-// 			csrfToken:    validCSRFToken,
-// 			wantCode:     http.StatusUnprocessableEntity,
-// 			wantFormTag:  formTag,
-// 		},
-// 		{
-// 			name:         "Invalid email",
-// 			userName:     validName,
-// 			userEmail:    "bob@example",
-// 			userPassword: validPassword,
-// 			csrfToken:    validCSRFToken,
-// 			wantCode:     http.StatusUnprocessableEntity,
-// 			wantFormTag:  formTag,
-// 		},
-// 		{
-// 			name:         "Short password",
-// 			userName:     validName,
-// 			userEmail:    validEmail,
-// 			userPassword: "pa$$",
-// 			csrfToken:    validCSRFToken,
-// 			wantCode:     http.StatusUnprocessableEntity,
-// 			wantFormTag:  formTag,
-// 		},
-// 		{
-// 			name:         "Duplicate email",
-// 			userName:     validName,
-// 			userEmail:    "dupe@example.com",
-// 			userPassword: validPassword,
-// 			csrfToken:    validCSRFToken,
-// 			wantCode:     http.StatusUnprocessableEntity,
-// 			wantFormTag:  formTag,
-// 		},
-// 	}
+	tests := []struct {
+		name         string
+		userName     string
+		userEmail    string
+		userPassword string
+		csrfToken    string
+		wantCode     int
+		wantFormTag  string
+	}{
+		{
+			name:         "Valid submission",
+			userName:     validName,
+			userEmail:    validEmail,
+			userPassword: validPassword,
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusSeeOther,
+		},
+		{
+			name:         "Invalid CSRF Token",
+			userName:     validName,
+			userEmail:    validEmail,
+			userPassword: validPassword,
+			csrfToken:    "wrongToken",
+			wantCode:     http.StatusBadRequest,
+		},
+		{
+			name:         "Empty name",
+			userName:     "",
+			userEmail:    validEmail,
+			userPassword: validPassword,
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+			wantFormTag:  formTag,
+		},
+		{
+			name:         "Empty email",
+			userName:     validName,
+			userEmail:    "",
+			userPassword: validPassword,
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+			wantFormTag:  formTag,
+		},
+		{
+			name:         "Empty password",
+			userName:     validName,
+			userEmail:    validEmail,
+			userPassword: "",
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+			wantFormTag:  formTag,
+		},
+		{
+			name:         "Invalid email",
+			userName:     validName,
+			userEmail:    "bob@example.",
+			userPassword: validPassword,
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+			wantFormTag:  formTag,
+		},
+		{
+			name:         "Short password",
+			userName:     validName,
+			userEmail:    validEmail,
+			userPassword: "pa$$",
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+			wantFormTag:  formTag,
+		},
+		{
+			name:         "Duplicate email",
+			userName:     validName,
+			userEmail:    "dupe@example.com",
+			userPassword: validPassword,
+			csrfToken:    validCSRFToken,
+			wantCode:     http.StatusUnprocessableEntity,
+			wantFormTag:  formTag,
+		},
+	}
 
-// 	for _, tc := range tests {
-// 		t.Run(tc.name, func(t *testing.T) {
-// 			form := url.Values{}
-// 			form.Add("name", tc.userName)
-// 			form.Add("email", tc.userEmail)
-// 			form.Add("password", tc.userPassword)
-// 			form.Add("csrf_token", tc.csrfToken)
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			form := url.Values{}
+			form.Add("name", tc.userName)
+			form.Add("email", tc.userEmail)
+			form.Add("password", tc.userPassword)
+			form.Add("csrf_token", tc.csrfToken)
 
-// 			code, _, body := ts.postForm(t, "/user/signup", form)
-// 			assert.Equal(t, code, tc.wantCode)
+			code, _, body := ts.postForm(t, "/user/signup", form)
+			assert.Equal(t, code, tc.wantCode)
 
-// 			if tc.wantFormTag != "" {
-// 				assert.Contains(t, body, tc.wantFormTag)
-// 			}
-// 		})
-// 	}
-// }
+			if tc.wantFormTag != "" {
+				assert.Contains(t, body, tc.wantFormTag)
+			}
+		})
+	}
+}
