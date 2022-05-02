@@ -41,7 +41,7 @@ func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	dsn := flag.String(
 		"dsn",
-		"dev:dev@/snippetbox?parseTime=true&collation=utf8mb4_unicode_ci", "MySQL data source name",
+		"dev:dev@tcp(localhost:3306)/snippetbox?parseTime=true&collation=utf8mb4_unicode_ci", "MySQL data source name",
 	)
 
 	flag.Parse()
