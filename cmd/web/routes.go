@@ -53,6 +53,10 @@ func (app *application) routes() http.Handler {
 	r.With(protected...).Post(
 		"/user/logout", app.userLogoutPost)
 	r.With(protected...).Get("/account/view", app.accountView)
+	r.With(protected...).Get(
+		"/account/password/update", app.accountPasswordUpdateView)
+	r.With(protected...).Post(
+		"/account/password/update", app.accountPasswordUpdatePost)
 
 	return r
 }
