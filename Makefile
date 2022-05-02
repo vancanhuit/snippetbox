@@ -12,6 +12,10 @@ db:
 			--mount 'type=bind,src=$(pwd)/sql,dst=/docker-entrypoint-initdb.d' \
 			mysql:8.0.28
 
+.PHONY: run
+run:
+	go run ./cmd/web
+
 .PHONY: testdb
 testdb:
 	docker container run --detach --name testdb \
