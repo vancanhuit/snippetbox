@@ -24,6 +24,7 @@ type application struct {
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
+	debug          bool
 }
 
 func openDB(dsn string) (*sql.DB, error) {
@@ -41,8 +42,10 @@ func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	dsn := flag.String(
 		"dsn",
-		"dev:dev@tcp(localhost:3306)/snippetbox?parseTime=true&collation=utf8mb4_unicode_ci", "MySQL data source name",
+		"dev:dev@tcp(localhost:3306)/snippetbox?parseTime=true&collation=utf8mb4_unicode_ci",
+		"MySQL data source name",
 	)
+	debug := flag.Bool("debug", false, "Enable debug mode")
 
 	flag.Parse()
 
@@ -74,6 +77,7 @@ func main() {
 		templateCache:  templateCache,
 		formDecoder:    formDecoder,
 		sessionManager: sessionManager,
+		debug:          *debug,
 	}
 
 	srv := &http.Server{
