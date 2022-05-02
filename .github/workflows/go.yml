@@ -9,6 +9,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      testdb:
+        image: mysql:8.0.28
+        ports:
+          - 3307:3306
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: snippetbox
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
     steps:
     - uses: actions/checkout@v3
 
