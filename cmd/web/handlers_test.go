@@ -191,7 +191,7 @@ func TestUserSignup(t *testing.T) {
 	}
 }
 
-func TestCreateSnippetCreate(t *testing.T) {
+func TestSnippetCreate(t *testing.T) {
 	app := newTestApplication(t)
 	ts := newTestServer(t, app.routes())
 	defer ts.Close()
