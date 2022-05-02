@@ -34,6 +34,7 @@ func (app *application) routes() http.Handler {
 	protected := append(dynamic, app.requireAuthentication)
 
 	r.With(dynamic...).Get("/", app.home)
+	r.With(dynamic...).Get("/about", app.about)
 	r.With(dynamic...).Get(
 		"/snippet/view/{id}", app.snippetView)
 	r.With(protected...).Get(
