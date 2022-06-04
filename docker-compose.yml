@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./
+    command: --addr=:8000 --dsn=dev:dev@tcp(db:3306)/snippetbox?parseTime=true&collation=utf8mb4_unicode_ci
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 10
+
+  db:
+    image: mysql:8.0.28
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=snippetbox
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=dev
+    volumes:
+      - type: bind
+        source: ./sql
+        target: /docker-entrypoint-initdb.d
