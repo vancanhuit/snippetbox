@@ -57,7 +57,7 @@ func (app *application) about(w http.ResponseWriter, r *http.Request) {
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("OK"))
+	w.Write([]byte("OK")) //nolint
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +84,8 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) snippetCreateView(
-	w http.ResponseWriter, r *http.Request) {
+	w http.ResponseWriter, r *http.Request,
+) {
 	data := app.newTemplateData(r)
 	data.Form = snippetCreateForm{
 		Expires: 365,
@@ -137,14 +138,16 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) userSignupView(
-	w http.ResponseWriter, r *http.Request) {
+	w http.ResponseWriter, r *http.Request,
+) {
 	data := app.newTemplateData(r)
 	data.Form = userSignupForm{}
 	app.render(w, http.StatusOK, "signup.tmpl", data)
 }
 
 func (app *application) userSignupPost(
-	w http.ResponseWriter, r *http.Request) {
+	w http.ResponseWriter, r *http.Request,
+) {
 	var form userSignupForm
 	err := app.decodePostForm(r, &form)
 	if err != nil {
@@ -192,14 +195,16 @@ func (app *application) userSignupPost(
 }
 
 func (app *application) userLoginView(
-	w http.ResponseWriter, r *http.Request) {
+	w http.ResponseWriter, r *http.Request,
+) {
 	data := app.newTemplateData(r)
 	data.Form = userLoginForm{}
 	app.render(w, http.StatusOK, "login.tmpl", data)
 }
 
 func (app *application) userLoginPost(
-	w http.ResponseWriter, r *http.Request) {
+	w http.ResponseWriter, r *http.Request,
+) {
 	var form userLoginForm
 
 	err := app.decodePostForm(r, &form)
@@ -254,7 +259,8 @@ func (app *application) userLoginPost(
 }
 
 func (app *application) userLogoutPost(
-	w http.ResponseWriter, r *http.Request) {
+	w http.ResponseWriter, r *http.Request,
+) {
 	err := app.sessionManager.RenewToken(r.Context())
 	if err != nil {
 		app.serverError(w, err)

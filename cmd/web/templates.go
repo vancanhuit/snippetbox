@@ -63,7 +63,6 @@ func newTemplateCache() (map[string]*template.Template, error) {
 			New(name).
 			Funcs(functions).
 			ParseFS(ui.Files, patterns...)
-
 		if err != nil {
 			return nil, err
 		}

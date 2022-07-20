@@ -90,7 +90,7 @@ func (m *UserModel) Exists(id int) (bool, error) {
 }
 
 func (m *UserModel) Get(id int) (*User, error) {
-	var user = &User{}
+	user := &User{}
 	stmt := `SELECT id, name, email, created FROM users WHERE id = ?`
 
 	err := m.DB.QueryRow(stmt, id).Scan(

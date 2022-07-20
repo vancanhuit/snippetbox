@@ -12,7 +12,7 @@ import (
 
 func (app *application) serverError(w http.ResponseWriter, err error) {
 	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
-	app.errorLog.Output(2, trace)
+	app.errorLog.Output(2, trace) //nolint
 
 	if app.debug {
 		http.Error(w, trace, http.StatusInternalServerError)
@@ -34,7 +34,8 @@ func (app *application) notFound(w http.ResponseWriter) {
 }
 
 func (app *application) render(
-	w http.ResponseWriter, status int, page string, data *templateData) {
+	w http.ResponseWriter, status int, page string, data *templateData,
+) {
 	ts, ok := app.templateCache[page]
 	if !ok {
 		err := fmt.Errorf("the template %s does not exist", page)
@@ -51,7 +52,7 @@ func (app *application) render(
 	}
 
 	w.WriteHeader(status)
-	buf.WriteTo(w)
+	buf.WriteTo(w) //nolint
 }
 
 func (app *application) decodePostForm(r *http.Request, dst any) error {
