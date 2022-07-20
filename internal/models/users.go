@@ -64,18 +64,16 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return 0, ErrInvalidCredentials
-		} else {
-			return 0, err
 		}
+		return 0, err
 	}
 
 	err = bcrypt.CompareHashAndPassword(hashedPassword, []byte(password))
 	if err != nil {
 		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
 			return 0, ErrInvalidCredentials
-		} else {
-			return 0, err
 		}
+		return 0, err
 	}
 
 	return id, nil
