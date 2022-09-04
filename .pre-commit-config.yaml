@@ -7,6 +7,6 @@ repos:
   - id: trailing-whitespace
   - id: check-added-large-files
 - repo: https://github.com/golangci/golangci-lint
-  rev: v1.47.3
+  rev: v1.49.0
   hooks:
   - id: golangci-lint
