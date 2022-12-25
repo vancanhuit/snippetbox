@@ -1,18 +1,15 @@
-version: '3.8'
-
 services:
   web:
     build:
       context: ./
-    command: --addr=:8000 --dsn=dev:dev@tcp(db:3306)/snippetbox?parseTime=true&collation=utf8mb4_unicode_ci
+    command: 
+      - --addr=:8000 
+      - --dsn=dev:dev@tcp(db:3306)/snippetbox?parseTime=true&collation=utf8mb4_unicode_ci
     ports:
       - 8000:8000
     depends_on:
-      - db
-    deploy:
-      restart_policy:
-        condition: on-failure
-        max_attempts: 10
+      db:
+        condition: service_healthy
 
   db:
     image: mysql:8.0.28
@@ -21,6 +18,12 @@ services:
       - MYSQL_DATABASE=snippetbox
       - MYSQL_USER=dev
       - MYSQL_PASSWORD=dev
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      start_period: 5s
+      retries: 3
+      interval: 15s
+      timeout: 30s
     volumes:
       - type: bind
         source: ./sql
