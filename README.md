@@ -13,3 +13,9 @@ make run
 make testdb
 make test
 ```
+
+## Running with Docker Compose
+
+```bash
+docker compose up -d --build
+```
