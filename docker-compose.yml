@@ -2,8 +2,8 @@ services:
   web:
     build:
       context: ./
-    command: 
-      - --addr=:8000 
+    command:
+      - --addr=:8000
       - --dsn=dev:dev@tcp(db:3306)/snippetbox?parseTime=true&collation=utf8mb4_unicode_ci
     ports:
       - 8000:8000
